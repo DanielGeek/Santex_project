@@ -1,11 +1,17 @@
-const mongoose = require('../database/db');
+const db = require('../db/db');
 
-const PlayerSchema = new mongoose.Schema({
-  name: String,
-  position: String,
-  dateOfBirth: String,
-  nationality: String,
-  // Add more fields as necessary
-});
+class Player {
+  static async getPlayersByTeam(teamName) {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM players WHERE team_name = ?', [teamName], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+}
 
-module.exports = mongoose.model('Player', PlayerSchema);
+module.exports = Player;

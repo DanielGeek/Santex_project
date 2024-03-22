@@ -1,20 +1,19 @@
-const fetch = require('node-fetch');
-const Competition = require('../models/competition');
-const Team = require('../models/team');
-const Player = require('../models/player');
+const axios = require('axios');
+require('dotenv').config();
 
-async function importLeague(leagueCode) {
-  // Fetch data from football-data.org API
-  // Save to DB
-  // Return the imported data
-}
+const FOOTBALL_API_KEY = process.env.FOOTBALL_API_KEY;
 
-async function getPlayers(leagueCode, teamName) {
-  // Retrieve players from DB based on leagueCode and optionally teamName
-}
+const getCompetitionData = async (leagueCode) => {
+  try {
+    const response = await axios.get(`http://api.football-data.org/v2/competitions/${leagueCode}`, {
+      headers: {
+        'X-Auth-Token': FOOTBALL_API_KEY
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error fetching competition data: ${error}`);
+  }
+};
 
-async function getTeam(name) {
-  // Retrieve a team and its players/coaches from the DB
-}
-
-module.exports = { importLeague, getPlayers, getTeam };
+module.exports = { getCompetitionData };
